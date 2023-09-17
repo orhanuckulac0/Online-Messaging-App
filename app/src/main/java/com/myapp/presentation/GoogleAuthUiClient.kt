@@ -1,4 +1,4 @@
-package com.myapp.presentationn
+package com.myapp.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -56,6 +56,24 @@ class GoogleAuthUiClient(
                 errorMessage = e.message
             )
         }
+    }
+
+    suspend fun signOut() {
+        try {
+            oneTapClient.signOut().await()
+            auth.signOut()
+        } catch(e: Exception) {
+            e.printStackTrace()
+            if(e is CancellationException) throw e
+        }
+    }
+
+    fun getSignedInUser(): UserData? = auth.currentUser?.run {
+        UserData(
+            userId = uid,
+            userName = displayName,
+            profilePictureURL = photoUrl?.toString()
+        )
     }
 
     private fun buildSignInRequest(): BeginSignInRequest {
