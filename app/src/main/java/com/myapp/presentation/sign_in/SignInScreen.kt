@@ -1,4 +1,4 @@
-package com.myapp.presentation
+package com.myapp.presentation.sign_in
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box

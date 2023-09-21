@@ -1,6 +1,5 @@
-package com.myapp.presentation
+package com.myapp.presentation.firebase
 
-import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -10,12 +9,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.myapp.BuildConfig
+import com.myapp.presentation.sign_in.SignInResult
+import com.myapp.presentation.sign_in.UserData
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 import java.util.concurrent.CancellationException
 
 class GoogleAuthUiClient(
-    private val context: Context,
     private val oneTapClient: SignInClient
     ) {
 
@@ -46,7 +46,8 @@ class GoogleAuthUiClient(
                         userId = uid,
                         userName = displayName,
                         profilePictureURL = photoUrl?.toString()
-                    )},
+                    )
+                },
                 errorMessage = null)
         }catch (e: Exception){
             e.printStackTrace()

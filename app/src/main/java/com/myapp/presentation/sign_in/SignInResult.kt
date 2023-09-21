@@ -1,4 +1,4 @@
-package com.myapp.presentation
+package com.myapp.presentation.sign_in
 
 data class SignInResult(
     val data: UserData?,

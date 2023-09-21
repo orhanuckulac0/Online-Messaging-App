@@ -1,4 +1,4 @@
-package com.myapp.presentation
+package com.myapp.presentation.sign_in
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

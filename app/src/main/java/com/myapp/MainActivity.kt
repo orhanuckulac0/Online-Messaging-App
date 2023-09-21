@@ -20,10 +20,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.identity.Identity
-import com.myapp.presentation.GoogleAuthUiClient
-import com.myapp.presentation.SignInScreen
-import com.myapp.presentation.SignInScreenViewModel
+import com.myapp.presentation.firebase.GoogleAuthUiClient
+import com.myapp.presentation.sign_in.SignInScreen
+import com.myapp.presentation.sign_in.SignInScreenViewModel
 import com.myapp.presentation.profile.ProfileScreen
+import com.myapp.presentation.register.RegisterScreen
 import com.myapp.ui.theme.MessagingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -33,7 +34,6 @@ class MainActivity : ComponentActivity() {
 
     private val googleAuthUiClient by lazy {
         GoogleAuthUiClient(
-            context = applicationContext,
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
     }
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "sign_in") {
+                    NavHost(navController = navController, startDestination = "register") {
                         composable("sign_in") {
                             val viewModel = viewModel<SignInScreenViewModel>()
                             val state by viewModel.state.collectAsStateWithLifecycle()
@@ -115,6 +115,9 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             )
+                        }
+                        composable(route = "register"){
+                            RegisterScreen()
                         }
                     }
                 }
