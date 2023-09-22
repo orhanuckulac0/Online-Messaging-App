@@ -1,5 +1,6 @@
 package com.myapp.presentation.di
 
+import com.myapp.domain.LoginUseCase
 import com.myapp.domain.RegisterUserUseCase
 import com.myapp.presentation.firebase.FirebaseAuthManager
 import dagger.Module
@@ -14,6 +15,11 @@ class UseCaseModule {
     @Provides
     fun provideRegisterUseCase(firebaseAuthManager: FirebaseAuthManager): RegisterUserUseCase {
         return RegisterUserUseCase(firebaseAuthManager)
+    }
+
+    @Provides
+    fun provideLoginUseCase(firebaseAuthManager: FirebaseAuthManager): LoginUseCase {
+        return LoginUseCase(firebaseAuthManager)
     }
 
 }

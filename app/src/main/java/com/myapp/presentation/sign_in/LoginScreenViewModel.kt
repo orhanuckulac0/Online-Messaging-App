@@ -1,9 +1,9 @@
-package com.myapp.presentation.register
+package com.myapp.presentation.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.myapp.domain.RegisterUserUseCase
+import com.myapp.domain.LoginUseCase
 import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,39 +13,46 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
-class RegisterScreenViewModel @Inject constructor(
-    private val registerUserUseCase: RegisterUserUseCase
-    ) : ViewModel() {
+class LoginScreenViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase
+): ViewModel() {
 
     private val _uiEvent =  MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
+
     fun onEvent(event: UiEvent){
         when(event) {
             is UiEvent.Navigate -> {
-                sendUiEvent(UiEvent.Navigate(Routes.LOG_IN))
+                sendUiEvent(UiEvent.Navigate(Routes.REGISTER))
             }
             else -> Unit
         }
     }
 
-    fun registerUser(email: String, password: String, onComplete: (FirebaseUser?) -> Unit,
-                     onError: (String) -> Unit
-    ) {
+    fun loginUser(
+        email: String,
+        password: String,
+        onComplete: (FirebaseUser?) -> Unit,
+        onError: (String) -> Unit
+    ){
         if (email.isEmpty()){
             sendUiEvent(UiEvent.ShowToast("Email can't be empty."))
         }else if(password.isEmpty()){
             sendUiEvent(UiEvent.ShowToast("Password can't be empty."))
         }else{
-            registerUserUseCase.execute(email, password, onComplete, onError)
+            loginUseCase.execute(email, password, onComplete, onError)
         }
     }
+
 
     private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             _uiEvent.emit(event)
         }
     }
+
 
 }

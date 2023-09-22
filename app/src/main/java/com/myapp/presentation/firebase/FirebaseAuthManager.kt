@@ -1,5 +1,6 @@
 package com.myapp.presentation.firebase
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,8 +23,8 @@ class FirebaseAuthManager {
                     if (uid != null) {
                         val userDocument = firestore.collection("users").document(uid)
 
-                        // set additional user-related data here
                         val userData = hashMapOf(
+                            "id" to user.uid,
                             "email" to email,
                             "password" to password
                             // Add more user data as needed
@@ -35,13 +36,26 @@ class FirebaseAuthManager {
                             }
                             .addOnFailureListener { e ->
                                 onError.invoke("Error creating user document: ${e.message}")
+                                Log.i("MYTAG","Error creating user document: ${e.message}")
                             }
                     }
                 } else {
                     onError.invoke("Registration failed: ${authResult.exception?.message}")
+                    Log.i("MYTAG","Error creating user document: ${authResult.exception?.message}")
+
                 }
             }
     }
 
-    // Can add more methods for handling Firebase authentication here
+    fun loginUser(email: String, password: String, onComplete: (FirebaseUser?) -> Unit, onError: (String) -> Unit){
+
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { authResult->
+                if (authResult.isSuccessful){
+                    onComplete.invoke(authResult.result?.user)
+                }else {
+                    onError.invoke("Login failed: ${authResult.exception?.message}")
+                }
+            }
+    }
 }
