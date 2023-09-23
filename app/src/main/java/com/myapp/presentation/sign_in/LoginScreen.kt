@@ -102,7 +102,7 @@ fun LoginScreen(
                     viewModel.loginUser(
                         email = email.value.text,
                         password = password.value.text,
-                        onComplete = { navController.navigate(Routes.PROFILE) },
+                        onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.HOME)) },
                         onError = {  }
                     )
                 },

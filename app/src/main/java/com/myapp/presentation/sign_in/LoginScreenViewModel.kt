@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.myapp.domain.LoginUseCase
-import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +25,7 @@ class LoginScreenViewModel @Inject constructor(
     fun onEvent(event: UiEvent){
         when(event) {
             is UiEvent.Navigate -> {
-                sendUiEvent(UiEvent.Navigate(Routes.REGISTER))
+                sendUiEvent(UiEvent.Navigate(event.route))
             }
             else -> Unit
         }

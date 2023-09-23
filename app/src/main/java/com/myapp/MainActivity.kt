@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.myapp.presentation.home.HomeScreen
 import com.myapp.presentation.profile.ProfileScreen
 import com.myapp.presentation.register.RegisterScreen
 import com.myapp.presentation.sign_in.LoginScreen
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Routes.LOG_IN) {
+                    NavHost(navController = navController, startDestination = Routes.HOME) {
                         composable(Routes.LOG_IN) {
                             LoginScreen(
                                 navController = navController
@@ -48,6 +49,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Routes.REGISTER){
                             RegisterScreen(navController = navController)
+                        }
+                        composable(route = Routes.HOME){
+                            HomeScreen()
                         }
                     }
                 }
