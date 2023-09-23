@@ -27,7 +27,9 @@ class LoginScreenViewModel @Inject constructor(
             is UiEvent.Navigate -> {
                 sendUiEvent(UiEvent.Navigate(event.route))
             }
-            else -> Unit
+            is UiEvent.ShowToast -> {
+                sendUiEvent(UiEvent.ShowToast(event.message))
+            }
         }
     }
 

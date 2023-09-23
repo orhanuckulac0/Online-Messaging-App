@@ -98,10 +98,12 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     viewModel.registerUser(
-                    email = email.value.text,
-                    password = password.value.text,
-                    onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.LOG_IN))},
-                    onError = {}
+                        email = email.value.text,
+                        password = password.value.text,
+                        onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.LOG_IN))},
+                        onError = { errorMessage->
+                            viewModel.onEvent(UiEvent.ShowToast(errorMessage))
+                        }
                     )
                           },
                 shape = RoundedCornerShape(50.dp),

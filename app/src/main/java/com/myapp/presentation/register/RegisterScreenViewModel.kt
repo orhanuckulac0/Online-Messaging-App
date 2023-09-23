@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.myapp.domain.RegisterUserUseCase
-import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,14 +23,19 @@ class RegisterScreenViewModel @Inject constructor(
     fun onEvent(event: UiEvent){
         when(event) {
             is UiEvent.Navigate -> {
-                sendUiEvent(UiEvent.Navigate(Routes.LOG_IN))
+                sendUiEvent(UiEvent.Navigate(event.route))
             }
-            else -> Unit
+            is UiEvent.ShowToast -> {
+                sendUiEvent(UiEvent.ShowToast(event.message))
+            }
         }
     }
 
-    fun registerUser(email: String, password: String, onComplete: (FirebaseUser?) -> Unit,
-                     onError: (String) -> Unit
+    fun registerUser(
+        email: String,
+        password: String,
+        onComplete: (FirebaseUser?) -> Unit,
+        onError: (String) -> Unit
     ) {
         if (email.isEmpty()){
             sendUiEvent(UiEvent.ShowToast("Email can't be empty."))

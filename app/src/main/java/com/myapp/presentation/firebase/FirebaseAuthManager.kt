@@ -2,6 +2,8 @@ package com.myapp.presentation.firebase
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -42,7 +44,6 @@ class FirebaseAuthManager {
                 } else {
                     onError.invoke("Registration failed: ${authResult.exception?.message}")
                     Log.i("MYTAG","Error creating user document: ${authResult.exception?.message}")
-
                 }
             }
     }
@@ -54,7 +55,21 @@ class FirebaseAuthManager {
                 if (authResult.isSuccessful){
                     onComplete.invoke(authResult.result?.user)
                 }else {
-                    onError.invoke("Login failed: ${authResult.exception?.message}")
+                    when(authResult.exception){
+                        is FirebaseAuthInvalidUserException -> {
+                            val errorMessage = "User with this email does not exist."
+                            onError.invoke(errorMessage)
+                        }
+                        is FirebaseAuthInvalidCredentialsException -> {
+                            val errorMessage = "Invalid email or password format."
+                            onError.invoke(errorMessage)
+                        }
+                        else -> {
+                            val errorMessage = "An error occurred during login, try again."
+                            onError.invoke(errorMessage)
+                        }
+                    }
+                    Log.i("MYTAG", "${authResult.exception?.message}")
                 }
             }
     }

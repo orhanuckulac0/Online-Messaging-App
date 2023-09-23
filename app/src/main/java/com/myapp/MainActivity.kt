@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Routes.HOME) {
+                    NavHost(navController = navController, startDestination = Routes.LOG_IN) {
                         composable(Routes.LOG_IN) {
                             LoginScreen(
                                 navController = navController

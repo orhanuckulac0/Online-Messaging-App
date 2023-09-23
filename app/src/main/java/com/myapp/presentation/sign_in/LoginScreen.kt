@@ -103,7 +103,9 @@ fun LoginScreen(
                         email = email.value.text,
                         password = password.value.text,
                         onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.HOME)) },
-                        onError = {  }
+                        onError = { errorMessage->
+                            viewModel.onEvent(UiEvent.ShowToast(errorMessage))
+                        }
                     )
                 },
                 shape = RoundedCornerShape(50.dp),
