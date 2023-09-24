@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var homeRoute: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +33,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val user = firebaseAuth.currentUser
+                    if (user != null){
+                        homeRoute = Routes.HOME
+                    }else{
+                        homeRoute = Routes.LOG_IN
+                    }
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Routes.LOG_IN) {
+                    NavHost(navController = navController, startDestination = homeRoute) {
                         composable(Routes.LOG_IN) {
                             LoginScreen(
                                 navController = navController
@@ -43,7 +50,7 @@ class MainActivity : ComponentActivity() {
                             ProfileScreen(
                                 onSignOut = {
                                     firebaseAuth.signOut()
-                                    navController.popBackStack()
+                                    navController.navigate(Routes.LOG_IN)
                                 }
                             )
                         }
@@ -51,7 +58,9 @@ class MainActivity : ComponentActivity() {
                             RegisterScreen(navController = navController)
                         }
                         composable(route = Routes.HOME){
-                            HomeScreen()
+                            HomeScreen(
+                                navController = navController
+                            )
                         }
                     }
                 }
