@@ -9,6 +9,7 @@ object Routes {
     const val REGISTER = "register"
     const val PROFILE = "profile"
     const val HOME = "home"
+    const val SETTINGS = "settings"
 
     fun NavOptionsBuilder.popUpToTop(navController: NavController) {
         popUpTo(navController.currentBackStackEntry?.destination?.route ?: return) {
