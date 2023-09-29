@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,10 +26,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.myapp.R
 import com.myapp.data.NavigationItem
 import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
@@ -102,7 +101,7 @@ fun AppBar(
                     },
                     actions = {
                         IconButton(onClick = { viewModel.onEvent(UiEvent.Navigate(Routes.PROFILE)) }) {
-                            Icon(painterResource(id = R.drawable.add_person), contentDescription = "Profile")
+                            Icon(imageVector = Icons.Filled.Person, contentDescription = "Profile")
                         }
                     },
                     scrollBehavior = scrollBehavior

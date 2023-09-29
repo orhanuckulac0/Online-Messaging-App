@@ -70,6 +70,8 @@ fun RegisterScreen(
 
         val email = remember { mutableStateOf(TextFieldValue()) }
         val password = remember { mutableStateOf(TextFieldValue()) }
+        val name = remember { mutableStateOf(TextFieldValue()) }
+        val surname = remember { mutableStateOf(TextFieldValue()) }
 
         Text(
             text = "Register",
@@ -77,6 +79,22 @@ fun RegisterScreen(
         )
 
         Spacer(modifier = Modifier.height(20.dp))
+
+
+        TextField(
+            label = { Text(text = "Name") },
+            value = name.value,
+            onValueChange = { name.value = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        TextField(
+            label = { Text(text = "Surname") },
+            value = surname.value,
+            onValueChange = { surname.value = it })
+
+        Spacer(modifier = Modifier.height(20.dp))
+
 
         TextField(
             label = { Text(text = "Email") },
@@ -100,6 +118,9 @@ fun RegisterScreen(
                     viewModel.registerUser(
                         email = email.value.text,
                         password = password.value.text,
+                        name = name.value.text,
+                        surname = surname.value.text,
+                        profileImage = "",
                         onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.LOG_IN))},
                         onError = { errorMessage->
                             viewModel.onEvent(UiEvent.ShowToast(errorMessage))

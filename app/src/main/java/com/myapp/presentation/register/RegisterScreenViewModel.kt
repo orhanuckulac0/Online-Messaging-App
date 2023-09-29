@@ -34,6 +34,9 @@ class RegisterScreenViewModel @Inject constructor(
     fun registerUser(
         email: String,
         password: String,
+        name: String,
+        surname: String,
+        profileImage: String,
         onComplete: (FirebaseUser?) -> Unit,
         onError: (String) -> Unit
     ) {
@@ -42,7 +45,15 @@ class RegisterScreenViewModel @Inject constructor(
         }else if(password.isEmpty()){
             sendUiEvent(UiEvent.ShowToast("Password can't be empty."))
         }else{
-            registerUserUseCase.execute(email, password, onComplete, onError)
+            registerUserUseCase.execute(
+                email,
+                password,
+                name.uppercase(),
+                surname.uppercase(),
+                profileImage,
+                onComplete,
+                onError
+            )
         }
     }
 
