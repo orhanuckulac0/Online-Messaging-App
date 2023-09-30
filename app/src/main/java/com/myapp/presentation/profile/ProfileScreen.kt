@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.myapp.R
-import com.myapp.presentation.firebase.StorageUtil
+import com.myapp.domain.repository.CloudStorageRepository
 
 @Composable
 fun ProfileScreen(
@@ -39,7 +39,7 @@ fun ProfileScreen(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         onProfileImageChanged(uri.toString())
-        StorageUtil.uploadToStorage(uri = uri!!, context = context)
+        CloudStorageRepository.uploadToStorage(uri = uri!!, context = context)
     }
 
     val painter =

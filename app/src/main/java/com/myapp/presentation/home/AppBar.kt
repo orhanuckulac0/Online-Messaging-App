@@ -28,7 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.myapp.data.NavigationItem
+import com.myapp.data.model.NavigationItem
 import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.myapp.presentation.firebase
+package com.myapp.domain.repository
 
 import android.content.Context
 import android.net.Uri
@@ -9,7 +9,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 
-class StorageUtil {
+class CloudStorageRepository {
 
     companion object {
 

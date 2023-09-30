@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,21 +18,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.myapp.presentation.firebase.FirebaseAuthManager
+import com.myapp.domain.repository.UserRepository
 import com.myapp.presentation.home.HomeScreen
 import com.myapp.presentation.profile.ProfileScreen
 import com.myapp.presentation.register.RegisterScreen
 import com.myapp.presentation.sign_in.LoginScreen
 import com.myapp.presentation.util.Routes
+import com.myapp.presentation.util.setDestination
 import com.myapp.ui.theme.MessagingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var homeRoute: String
-    private lateinit var firebaseAuthManager: FirebaseAuthManager
+    @Inject
+    lateinit var firebaseAuth : FirebaseAuth
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +47,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     // Profile Screen
                     var userProfileImageURL: Uri? by remember { mutableStateOf(null) }
-                    firebaseAuthManager = FirebaseAuthManager()
 
-                    firebaseAuthManager.getCurrentUserDetails { userDetails ->
+                    LaunchedEffect(key1 = true) {
+                        val userDetails = userRepository.getCurrentUserDetails()
                         userProfileImageURL = userDetails["profileImage"]?.toUri()
                     }
 
@@ -54,14 +58,11 @@ class MainActivity : ComponentActivity() {
                     }
 
                     // navigation
-                    val user = firebaseAuth.currentUser
-                    homeRoute = if (user != null){
-                        Routes.HOME
-                    }else{
-                        Routes.LOG_IN
-                    }
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = homeRoute) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = setDestination(firebaseAuth)
+                    ) {
 
                         composable(Routes.LOG_IN) {
                             LoginScreen(

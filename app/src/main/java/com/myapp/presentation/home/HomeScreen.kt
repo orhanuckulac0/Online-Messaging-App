@@ -18,7 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.myapp.data.NavigationItem
+import com.myapp.data.model.NavigationItem
 import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
 

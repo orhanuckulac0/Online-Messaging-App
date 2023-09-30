@@ -3,7 +3,7 @@ package com.myapp.presentation.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.myapp.domain.RegisterUserUseCase
+import com.myapp.domain.use_cases.RegisterUserUseCase
 import com.myapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +31,7 @@ class RegisterScreenViewModel @Inject constructor(
         }
     }
 
-    fun registerUser(
+    suspend fun registerUser(
         email: String,
         password: String,
         name: String,

@@ -3,7 +3,7 @@ package com.myapp.presentation.sign_in
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.myapp.domain.LoginUseCase
+import com.myapp.domain.use_cases.LoginUseCase
 import com.myapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +33,7 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 
-    fun loginUser(
+    suspend fun loginUser(
         email: String,
         password: String,
         onComplete: (FirebaseUser?) -> Unit,

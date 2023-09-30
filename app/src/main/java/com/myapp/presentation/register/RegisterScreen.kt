@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +49,7 @@ fun RegisterScreen(
     BackHandler {
         navController.popBackStack()
     }
-
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     LaunchedEffect(key1 = true){
         viewModel.uiEvent.collect{event->
@@ -115,17 +117,19 @@ fun RegisterScreen(
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-                    viewModel.registerUser(
-                        email = email.value.text,
-                        password = password.value.text,
-                        name = name.value.text,
-                        surname = surname.value.text,
-                        profileImage = "",
-                        onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.LOG_IN))},
-                        onError = { errorMessage->
-                            viewModel.onEvent(UiEvent.ShowToast(errorMessage))
-                        }
-                    )
+                    scope.launch {
+                        viewModel.registerUser(
+                            email = email.value.text,
+                            password = password.value.text,
+                            name = name.value.text,
+                            surname = surname.value.text,
+                            profileImage = "",
+                            onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.LOG_IN))},
+                            onError = { errorMessage->
+                                viewModel.onEvent(UiEvent.ShowToast(errorMessage))
+                            }
+                        )
+                    }
                           },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
