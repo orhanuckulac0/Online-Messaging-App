@@ -16,30 +16,44 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.myapp.R
-import com.myapp.domain.repository.CloudStorageRepository
+import com.myapp.data.model.UserModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
     onProfileImageChanged: (String) -> Unit,
     onSignOut: () -> Unit,
-    userProfileImageURL: String
+    userProfileImageURL: String,
+    viewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-
+    val scope = rememberCoroutineScope()
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         onProfileImageChanged(uri.toString())
-        CloudStorageRepository.uploadToStorage(uri = uri!!, context = context)
+        val user = UserModel(
+            null,
+            "test",
+            "test surname",
+            "test@gmail.com",
+            null,
+            uri.toString()
+        )
+        scope.launch {
+            viewModel.updateUser(userModel = user)
+        }
     }
 
     val painter =

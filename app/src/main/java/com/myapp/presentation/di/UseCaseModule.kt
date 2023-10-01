@@ -3,6 +3,7 @@ package com.myapp.presentation.di
 import com.myapp.domain.use_cases.LoginUseCase
 import com.myapp.domain.use_cases.RegisterUserUseCase
 import com.myapp.domain.repository.UserRepository
+import com.myapp.domain.use_cases.UpdateUserUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,4 +23,8 @@ class UseCaseModule {
         return LoginUseCase(firebaseAuthManager)
     }
 
+    @Provides
+    fun provideUpdateUserUseCase(firebaseAuthManager: UserRepository): UpdateUserUseCase {
+        return UpdateUserUseCase(firebaseAuthManager)
+    }
 }

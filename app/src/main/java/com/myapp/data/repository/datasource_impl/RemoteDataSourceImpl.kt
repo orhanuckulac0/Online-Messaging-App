@@ -101,19 +101,14 @@ class RemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateUserDetails(
-        name: String,
-        surname: String,
-        email: String,
-        profileImage: String
-    ): ResultHappen<Unit> {
+    override suspend fun updateUserDetails(userModel: UserModel): ResultHappen<Unit> {
         val currentUser = firebaseAuth.currentUser?.uid
         val documentPath = "users/$currentUser"
         val updatedData = mapOf(
-            "name" to name,
-            "surname" to surname,
-            "email" to email,
-            "profileImage" to profileImage
+            "name" to userModel.name,
+            "surname" to userModel.surname,
+            "email" to userModel.email,
+            "profileImage" to userModel.profileImage
         )
 
         return try {

@@ -8,10 +8,5 @@ interface RemoteDataSource {
     suspend fun getCurrentUserDetails(): HashMap<String, String?>
     suspend fun registerUser(userModel: UserModel): ResultHappen<FirebaseUser?>
     suspend fun loginUser(email: String, password: String): ResultHappen<FirebaseUser?>
-    suspend fun updateUserDetails(
-        name: String,
-        surname: String,
-        email: String,
-        profileImage: String
-    ): ResultHappen<Unit>
+    suspend fun updateUserDetails(userModel: UserModel): ResultHappen<Unit>
 }

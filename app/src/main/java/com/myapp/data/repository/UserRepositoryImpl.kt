@@ -23,12 +23,7 @@ class UserRepositoryImpl @Inject constructor(
         return remoteDataSource.getCurrentUserDetails()
     }
 
-    override suspend fun updateUserDetails(
-        name: String,
-        surname: String,
-        email: String,
-        profileImage: String
-    ): ResultHappen<Unit> {
-        return remoteDataSource.updateUserDetails(name, surname, email, profileImage)
+    override suspend fun updateUserDetails(userModel: UserModel): ResultHappen<Unit> {
+        return remoteDataSource.updateUserDetails(userModel)
     }
 }

@@ -12,10 +12,5 @@ interface UserRepository {
 
     suspend fun getCurrentUserDetails(): HashMap<String, String?>
 
-    suspend fun updateUserDetails(
-        name: String,
-        surname: String,
-        email: String,
-        profileImage: String
-    ): ResultHappen<Unit>
+    suspend fun updateUserDetails(userModel: UserModel): ResultHappen<Unit>
 }
