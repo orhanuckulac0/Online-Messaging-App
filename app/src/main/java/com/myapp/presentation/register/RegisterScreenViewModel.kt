@@ -3,6 +3,7 @@ package com.myapp.presentation.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.myapp.data.model.UserModel
 import com.myapp.domain.use_cases.RegisterUserUseCase
 import com.myapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,28 +33,16 @@ class RegisterScreenViewModel @Inject constructor(
     }
 
     suspend fun registerUser(
-        email: String,
-        password: String,
-        name: String,
-        surname: String,
-        profileImage: String,
+        userModel: UserModel,
         onComplete: (FirebaseUser?) -> Unit,
         onError: (String) -> Unit
     ) {
-        if (email.isEmpty()){
+        if (userModel.email.isEmpty()){
             sendUiEvent(UiEvent.ShowToast("Email can't be empty."))
-        }else if(password.isEmpty()){
+        }else if(userModel.password!!.isEmpty()){
             sendUiEvent(UiEvent.ShowToast("Password can't be empty."))
         }else{
-            registerUserUseCase.execute(
-                email,
-                password,
-                name.uppercase(),
-                surname.uppercase(),
-                profileImage,
-                onComplete,
-                onError
-            )
+            registerUserUseCase.execute(userModel, onComplete, onError)
         }
     }
 

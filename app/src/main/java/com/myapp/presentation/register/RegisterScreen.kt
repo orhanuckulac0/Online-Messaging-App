@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.myapp.data.model.UserModel
 import com.myapp.presentation.util.Routes
 import com.myapp.presentation.util.UiEvent
 import kotlinx.coroutines.launch
@@ -117,13 +118,17 @@ fun RegisterScreen(
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
+                    val user = UserModel(
+                        id = null,
+                        name = name.value.text,
+                        surname = surname.value.text,
+                        email = email.value.text,
+                        password = password.value.text,
+                        profileImage = null,
+                    )
                     scope.launch {
                         viewModel.registerUser(
-                            email = email.value.text,
-                            password = password.value.text,
-                            name = name.value.text,
-                            surname = surname.value.text,
-                            profileImage = "",
+                            userModel = user,
                             onComplete = { viewModel.onEvent(UiEvent.Navigate(Routes.LOG_IN))},
                             onError = { errorMessage->
                                 viewModel.onEvent(UiEvent.ShowToast(errorMessage))

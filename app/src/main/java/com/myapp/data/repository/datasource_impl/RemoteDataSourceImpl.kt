@@ -8,6 +8,7 @@ import com.myapp.data.repository.data_source.RemoteDataSource
 import com.myapp.presentation.util.ResultHappen
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.auth.FirebaseAuth
+import com.myapp.data.model.UserModel
 import javax.inject.Inject
 
 
@@ -44,26 +45,22 @@ class RemoteDataSourceImpl @Inject constructor(
         }
         return userDetails
     }
-    override suspend fun registerUser(
-        email: String,
-        password: String,
-        name: String,
-        surname: String,
-        profileImage: String
-    ): ResultHappen<FirebaseUser?> {
+    override suspend fun registerUser(userModel: UserModel): ResultHappen<FirebaseUser?> {
         return try {
-            val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            val authResult = firebaseAuth.createUserWithEmailAndPassword(
+                userModel.email,
+                userModel.password!!
+            ).await()
             val user = authResult.user
 
             if (user != null) {
                 val userData = hashMapOf(
                     "id" to user.uid,
-                    "email" to email,
-                    "password" to password,
-                    "name" to name,
-                    "surname" to surname,
-                    "profileImage" to profileImage
-                    // Add more user data as needed
+                    "email" to userModel.email,
+                    "password" to userModel.password,
+                    "name" to userModel.name,
+                    "surname" to userModel.surname,
+                    "profileImage" to userModel.profileImage
                 )
 
                 firestore.collection("users").document(user.uid)
