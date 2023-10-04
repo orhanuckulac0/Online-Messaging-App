@@ -1,10 +1,14 @@
 package com.myapp.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class UserModel(
     val id: String? = null,
-    val name: String,
-    val surname: String,
+    var name: String,
+    var surname: String,
     val email: String,
-    val password: String? = null,
-    val profileImage: String? = null
-)
+    var password: String? = null,
+    var profileImage: String? = null
+): Parcelable

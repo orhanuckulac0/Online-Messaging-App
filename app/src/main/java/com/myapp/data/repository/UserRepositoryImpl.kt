@@ -1,5 +1,7 @@
 package com.myapp.data.repository
 
+import android.content.Context
+import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import com.myapp.data.model.UserModel
 import com.myapp.data.repository.data_source.RemoteDataSource
@@ -19,11 +21,15 @@ class UserRepositoryImpl @Inject constructor(
         return remoteDataSource.loginUser(email, password)
     }
 
-    override suspend fun getCurrentUserDetails(): HashMap<String, String?> {
+    override suspend fun getCurrentUserDetails(): ResultHappen<UserModel> {
         return remoteDataSource.getCurrentUserDetails()
     }
 
     override suspend fun updateUserDetails(userModel: UserModel): ResultHappen<Unit> {
         return remoteDataSource.updateUserDetails(userModel)
+    }
+
+    override suspend fun getImageURLFromStorage(uri: Uri, context: Context): ResultHappen<String?> {
+        return remoteDataSource.getImageURLFromStorage(uri, context)
     }
 }

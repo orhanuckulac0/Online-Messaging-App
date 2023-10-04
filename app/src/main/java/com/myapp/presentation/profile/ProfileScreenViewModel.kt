@@ -11,6 +11,7 @@ import javax.inject.Inject
 class ProfileScreenViewModel @Inject constructor(
     private val updateUserUseCase: UpdateUserUseCase
 ): ViewModel() {
+
     suspend fun updateUser(userModel: UserModel){
         updateUserUseCase.execute(
             userModel = userModel,

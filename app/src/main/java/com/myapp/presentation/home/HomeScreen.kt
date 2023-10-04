@@ -33,6 +33,7 @@ fun HomeScreen(
         viewModel.uiEvent.collect{event->
             when(event){
                 is UiEvent.Navigate -> {
+                    navController.currentBackStackEntry!!.savedStateHandle["user"] = viewModel.user
                     navController.navigate(event.route)
                 }
                 is UiEvent.ShowToast -> {

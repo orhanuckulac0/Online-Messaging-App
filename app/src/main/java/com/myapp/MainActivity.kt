@@ -1,24 +1,17 @@
 package com.myapp
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.core.net.toUri
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.myapp.domain.repository.UserRepository
+import com.myapp.data.model.UserModel
 import com.myapp.presentation.home.HomeScreen
 import com.myapp.presentation.profile.ProfileScreen
 import com.myapp.presentation.register.RegisterScreen
@@ -34,8 +27,6 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var firebaseAuth : FirebaseAuth
-    @Inject
-    lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,18 +36,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Profile Screen
-                    var userProfileImageURL: Uri? by remember { mutableStateOf(null) }
-
-                    LaunchedEffect(key1 = true) {
-                        val userDetails = userRepository.getCurrentUserDetails()
-                        userProfileImageURL = userDetails["profileImage"]?.toUri()
-                    }
-
-                    val updateProfileImage: (String) -> Unit = { newImageURL ->
-                        userProfileImageURL = newImageURL.toUri()
-                    }
-
                     // navigation
                     val navController = rememberNavController()
                     NavHost(
@@ -71,15 +50,13 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(route = Routes.PROFILE){
+                            val user = navController.previousBackStackEntry?.savedStateHandle?.get<UserModel>("user")
                             ProfileScreen(
-                                onProfileImageChanged = {
-                                    updateProfileImage(it)
-                                },
+                                userDetails = user,
                                 onSignOut = {
                                     firebaseAuth.signOut()
                                     navController.navigate(Routes.LOG_IN)
-                                },
-                                userProfileImageURL = userProfileImageURL?.toString() ?: ""
+                                }
                             )
                         }
 
