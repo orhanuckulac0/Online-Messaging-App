@@ -1,4 +1,4 @@
-package com.myapp.presentation.util
+package com.myapp.presentation.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
@@ -16,6 +16,5 @@ object Routes {
             inclusive =  true
         }
     }
-
 
 }

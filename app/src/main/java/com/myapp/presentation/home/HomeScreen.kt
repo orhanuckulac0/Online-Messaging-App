@@ -1,5 +1,6 @@
 package com.myapp.presentation.home
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -8,27 +9,29 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.myapp.data.model.NavigationItem
-import com.myapp.presentation.util.Routes
+import com.myapp.presentation.navigation.Routes
 import com.myapp.presentation.util.UiEvent
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    scrollBehavior: TopAppBarDefaults,
+    context: Context
 ){
-    val context = LocalContext.current
+
     LaunchedEffect(key1 = true){
         viewModel.uiEvent.collect{event->
             when(event){
@@ -42,10 +45,6 @@ fun HomeScreen(
             }
         }
     }
-
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val items = listOf(
         NavigationItem(
@@ -71,6 +70,7 @@ fun HomeScreen(
     AppBar(
         drawerState = drawerState,
         scope = scope,
-        scrollBehavior = scrollBehavior,
-        items = items)
+        scrollBehavior = scrollBehavior.pinnedScrollBehavior(),
+        items = items
+        )
 }

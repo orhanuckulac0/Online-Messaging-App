@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.myapp.data.model.UserModel
-import com.myapp.presentation.util.Routes
+import com.myapp.presentation.navigation.Routes
 import com.myapp.presentation.util.UiEvent
 import kotlinx.coroutines.launch
 
