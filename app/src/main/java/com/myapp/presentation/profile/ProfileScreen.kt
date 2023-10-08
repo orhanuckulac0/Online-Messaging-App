@@ -96,6 +96,9 @@ fun ProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
             ) {
+                
+                Text(text = "Hello ${userDetails?.name}")
+                
                 if (imageUri != null){
                     AsyncImage(
                         model = imageUri,
@@ -122,7 +125,12 @@ fun ProfileScreen(
                 }
                 Button(
                     onClick = {
-                        onSignOut()
+                        scope.launch {
+                            viewModel.updateUser(userDetails!!.copy(
+                                loggedIn = false
+                            ))
+                            onSignOut()
+                        }
                     }
                 ) {
                     Text(text = "Sign Out")

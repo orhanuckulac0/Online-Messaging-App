@@ -15,6 +15,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.myapp.data.model.UserModel
+import com.myapp.data.model.UserModelFirestore
 import javax.inject.Inject
 
 
@@ -44,6 +45,7 @@ class RemoteDataSourceImpl @Inject constructor(
                     val surname = documentSnapshot.getString("surname")
                     val email = documentSnapshot.getString("email")
                     val profileImage = documentSnapshot.getString("profileImage")
+                    val loggedIn = documentSnapshot.getBoolean("loggedIn")
 
                     val userDetails = UserModel(
                         id = null,
@@ -51,7 +53,8 @@ class RemoteDataSourceImpl @Inject constructor(
                         surname = surname ?: "",
                         email = email ?: "",
                         password = null,
-                        profileImage = profileImage ?: ""
+                        profileImage = profileImage ?: "",
+                        loggedIn = loggedIn ?: false
                     )
 
                     return ResultHappen.Success(userDetails)
@@ -81,7 +84,8 @@ class RemoteDataSourceImpl @Inject constructor(
                     "password" to userModel.password,
                     "name" to userModel.name,
                     "surname" to userModel.surname,
-                    "profileImage" to userModel.profileImage
+                    "profileImage" to userModel.profileImage,
+                    "loggedIn" to userModel.loggedIn
                 )
 
                 firestore.collection("users").document(user.uid)
@@ -98,14 +102,24 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun loginUser(email: String, password: String): ResultHappen<FirebaseUser?> {
         return try {
-            val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                it.result
-            }
+            val authResultTask = firebaseAuth.signInWithEmailAndPassword(email, password)
+            val authResult = authResultTask.await()
 
-            if (authResult.isSuccessful) {
-                ResultHappen.Success(authResult.result.user)
+            if (authResult.user != null) {
+                try {
+                    // set user login status to true
+                    val user = firebaseAuth.currentUser?.uid
+                    firestore
+                        .document("users/$user")
+                        .update("loggedIn", true)
+                }catch (e: java.lang.Exception){
+                    Log.i("MYTAG", "${e.message}")
+                }
+                ResultHappen.Success(authResult.user)
             } else {
-                when (authResult.exception) {
+                val exception = authResultTask.exception
+                Log.e("MYTAG", "Login failed: ${exception?.message}")
+                when (exception) {
                     is FirebaseAuthInvalidUserException -> {
                         ResultHappen.Error("User with this email does not exist.")
                     }
@@ -118,7 +132,8 @@ class RemoteDataSourceImpl @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            ResultHappen.Error("An error occurred during login: ${e.message}")
+            Log.e("MYTAG", "Login error: ${e.message}")
+            ResultHappen.Error("An error occurred during login, try again.")
         }
     }
 
@@ -129,11 +144,13 @@ class RemoteDataSourceImpl @Inject constructor(
             "name" to userModel.name,
             "surname" to userModel.surname,
             "email" to userModel.email,
-            "profileImage" to userModel.profileImage
+            "profileImage" to userModel.profileImage,
+            "loggedIn" to userModel.loggedIn
         )
 
         return try {
-            firestore.document(documentPath)
+            firestore
+                .document(documentPath)
                 .update(updatedData)
                 .await()
             ResultHappen.Success(Unit)
@@ -171,6 +188,30 @@ class RemoteDataSourceImpl @Inject constructor(
         } else {
             Log.e("MYTAG", "User is not authenticated")
             return ResultHappen.Error("User is not authenticated")
+        }
+    }
+
+    override suspend fun getOnlineUsers(): ResultHappen<List<UserModelFirestore>> {
+        try {
+            val firestore = FirebaseFirestore.getInstance()
+            val usersCollection = firestore.collection("users")
+
+            val querySnapshot = usersCollection.whereEqualTo("loggedIn", true).get().await()
+
+            val loggedInUsers = mutableListOf<UserModelFirestore>()
+            for (document in querySnapshot.documents) {
+                val user = document.toObject(UserModelFirestore::class.java)
+                if (user != null) {
+                    user.id = document.id // Set the document ID in the UserModel
+                    Log.i("MYTAG", "${user.id}")
+                    loggedInUsers.add(user)
+                    Log.i("MYTAG", "$loggedInUsers")
+                }
+            }
+
+            return ResultHappen.Success(loggedInUsers)
+        } catch (e: Exception) {
+            return ResultHappen.Error("Failed to retrieve logged-in users: ${e.message}")
         }
     }
 }

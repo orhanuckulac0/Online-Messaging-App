@@ -125,6 +125,7 @@ fun RegisterScreen(
                         email = email.value.text,
                         password = password.value.text,
                         profileImage = null,
+                        loggedIn = false
                     )
                     scope.launch {
                         viewModel.registerUser(

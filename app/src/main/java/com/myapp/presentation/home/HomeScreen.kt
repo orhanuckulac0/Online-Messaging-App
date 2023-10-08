@@ -1,6 +1,7 @@
 package com.myapp.presentation.home
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -14,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.myapp.data.model.NavigationItem
@@ -31,6 +33,10 @@ fun HomeScreen(
     scrollBehavior: TopAppBarDefaults,
     context: Context
 ){
+    val users = viewModel.onlineUsers.observeAsState()
+    LaunchedEffect(key1 = users){
+        Log.i("MYTAG", "${users.value}")
+    }
 
     LaunchedEffect(key1 = true){
         viewModel.uiEvent.collect{event->

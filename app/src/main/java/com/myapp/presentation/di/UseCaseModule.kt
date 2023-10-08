@@ -4,6 +4,7 @@ import com.myapp.domain.use_cases.LoginUseCase
 import com.myapp.domain.use_cases.RegisterUserUseCase
 import com.myapp.domain.repository.UserRepository
 import com.myapp.domain.use_cases.GetImageUrlUseCase
+import com.myapp.domain.use_cases.GetOnlineUsersUseCase
 import com.myapp.domain.use_cases.GetUserDetailsUseCase
 import com.myapp.domain.use_cases.UpdateUserUseCase
 import dagger.Module
@@ -38,5 +39,10 @@ class UseCaseModule {
     @Provides
     fun provideGetImageUrlUseCase(firebaseAuthManager: UserRepository): GetImageUrlUseCase {
         return GetImageUrlUseCase(firebaseAuthManager)
+    }
+
+    @Provides
+    fun provideGetOnlineUsersUseCase(userRepository: UserRepository): GetOnlineUsersUseCase {
+        return GetOnlineUsersUseCase(userRepository)
     }
 }

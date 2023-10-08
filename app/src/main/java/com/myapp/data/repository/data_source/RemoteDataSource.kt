@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import com.myapp.data.model.UserModel
+import com.myapp.data.model.UserModelFirestore
 import com.myapp.presentation.util.ResultHappen
 
 interface RemoteDataSource {
@@ -13,4 +14,5 @@ interface RemoteDataSource {
     suspend fun updateUserDetails(userModel: UserModel): ResultHappen<Unit>
 
     suspend fun getImageURLFromStorage(uri: Uri, context: Context): ResultHappen<String?>
+    suspend fun getOnlineUsers(): ResultHappen<List<UserModelFirestore>>
 }
