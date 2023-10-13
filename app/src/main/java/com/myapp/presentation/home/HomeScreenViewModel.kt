@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.myapp.data.model.PushNotification
 import com.myapp.data.model.UserModel
 import com.myapp.data.model.UserModelFirestore
+import com.myapp.domain.use_cases.AddFriendsSendNotificationUseCase
 import com.myapp.domain.use_cases.GetOnlineUsersUseCase
 import com.myapp.domain.use_cases.GetUserDetailsUseCase
 import com.myapp.presentation.util.ResultHappen
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val getUserDetailsUseCase: GetUserDetailsUseCase,
-    private val getOnlineUsersUseCase: GetOnlineUsersUseCase
+    private val getOnlineUsersUseCase: GetOnlineUsersUseCase,
+    private val addFriendsUseCase: AddFriendsSendNotificationUseCase
 ): ViewModel() {
 
     private val _uiEvent =  MutableSharedFlow<UiEvent>()
@@ -42,7 +45,6 @@ class HomeScreenViewModel @Inject constructor(
             getUserDetailsUseCase.execute(
                 onComplete = { userDetails->
                     user = userDetails
-                    Log.i("MYTAG", "USER $user")
                 },
                 onError = { error->
                     Log.i("MYTAG", "ERROR $error")
@@ -61,12 +63,21 @@ class HomeScreenViewModel @Inject constructor(
                 }
                 is ResultHappen.Error -> {
                     val errorMessage = result.message
-                    // Handle the error
+                    Log.i("MYTAG", errorMessage.toString())
                 }
             }
         }
     }
 
+    fun addFriends(currentUserID: String, email: String, pushNotification: PushNotification){
+        viewModelScope.launch(Dispatchers.IO) {
+            addFriendsUseCase.execute(
+                currentUserID,
+                email,
+                pushNotification
+            )
+        }
+    }
 
     fun onEvent(event: UiEvent){
         when(event) {

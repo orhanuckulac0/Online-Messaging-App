@@ -3,6 +3,7 @@ package com.myapp.presentation.di
 import com.myapp.domain.use_cases.LoginUseCase
 import com.myapp.domain.use_cases.RegisterUserUseCase
 import com.myapp.domain.repository.UserRepository
+import com.myapp.domain.use_cases.AddFriendsSendNotificationUseCase
 import com.myapp.domain.use_cases.GetImageUrlUseCase
 import com.myapp.domain.use_cases.GetOnlineUsersUseCase
 import com.myapp.domain.use_cases.GetUserDetailsUseCase
@@ -44,5 +45,10 @@ class UseCaseModule {
     @Provides
     fun provideGetOnlineUsersUseCase(userRepository: UserRepository): GetOnlineUsersUseCase {
         return GetOnlineUsersUseCase(userRepository)
+    }
+
+    @Provides
+    fun provideAddFriendsSendNotificationUseCase(userRepository: UserRepository): AddFriendsSendNotificationUseCase {
+        return AddFriendsSendNotificationUseCase(userRepository)
     }
 }

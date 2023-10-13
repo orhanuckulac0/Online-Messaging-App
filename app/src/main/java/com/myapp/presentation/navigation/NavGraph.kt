@@ -40,8 +40,8 @@ fun NavGraph(
             ProfileScreen(
                 userDetails = user,
                 onSignOut = {
-                    onSignOut()
                     navController.navigate(Routes.LOG_IN)
+                    onSignOut()
                 },
                 onPopBackStack = {
                     navController.popBackStack()

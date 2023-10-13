@@ -12,6 +12,7 @@ data class UserModel(
     var password: String? = null,
     var profileImage: String? = null,
     var loggedIn: Boolean,
+    var fcmToken: String? = null
 
     ): Parcelable
 
@@ -23,7 +24,8 @@ data class UserModelFirestore(
     val email: String,
     var password: String? = null,
     var profileImage: String? = null,
-    var loggedIn: Boolean
+    var loggedIn: Boolean,
+    var fcmToken: String? = null
 ) {
     constructor() : this("", "", "", "", null, null, false)
 }

@@ -23,7 +23,7 @@ android {
             useSupportLibrary true
         }
         buildConfigField("String", "DEFAULT_WEB_CLIENT_ID", DEFAULT_WEB_CLIENT_ID)
-
+        buildConfigField("String", "SERVER_KEY", SERVER_KEY)
     }
 
     buildTypes {
@@ -78,6 +78,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
 
     // coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
@@ -91,9 +92,14 @@ dependencies {
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
     implementation("androidx.datastore:datastore:1.0.0")
 
+    // hilt
     implementation 'com.google.dagger:hilt-android:2.48'
     kapt 'com.google.dagger:hilt-compiler:2.48'
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

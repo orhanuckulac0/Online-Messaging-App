@@ -3,6 +3,7 @@ package com.myapp.data.repository
 import android.content.Context
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
+import com.myapp.data.model.PushNotification
 import com.myapp.data.model.UserModel
 import com.myapp.data.model.UserModelFirestore
 import com.myapp.data.repository.data_source.RemoteDataSource
@@ -36,5 +37,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getOnlineUser(): ResultHappen<List<UserModelFirestore>> {
         return remoteDataSource.getOnlineUsers()
+    }
+
+    override suspend fun addFriendsAndSendNotification(
+        currentUserID: String,
+        email: String,
+        pushNotification: PushNotification
+    ): ResultHappen<Unit> {
+        return remoteDataSource.addFriendsAndSendNotification(currentUserID, email, pushNotification)
     }
 }

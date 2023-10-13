@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,13 +23,14 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.myapp.data.model.NavigationItem
-import com.myapp.presentation.navigation.Routes
 import com.myapp.presentation.util.UiEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -46,6 +47,12 @@ fun AppBar(
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
+    var showDialog by remember { mutableStateOf(false) }
+
+    AddFriendsDialog(
+        showDialog = showDialog,
+        onDismiss = { showDialog = false }
+    )
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -100,8 +107,8 @@ fun AppBar(
                         }
                     },
                     actions = {
-                        IconButton(onClick = { viewModel.onEvent(UiEvent.Navigate(Routes.PROFILE)) }) {
-                            Icon(imageVector = Icons.Filled.Person, contentDescription = "Profile")
+                        IconButton(onClick = { showDialog = true }) {
+                            Icon(imageVector = Icons.Filled.Add, contentDescription = "Profile")
                         }
                     },
                     scrollBehavior = scrollBehavior
