@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.myapp.data.model.UserModel
 import com.myapp.presentation.home.HomeScreen
 import com.myapp.presentation.profile.ProfileScreen
 import com.myapp.presentation.register.RegisterScreen
@@ -36,9 +35,7 @@ fun NavGraph(
         }
 
         composable(route = Routes.PROFILE){
-            val user = navController.previousBackStackEntry?.savedStateHandle?.get<UserModel>("user")
             ProfileScreen(
-                userDetails = user,
                 onSignOut = {
                     navController.navigate(Routes.LOG_IN)
                     onSignOut()

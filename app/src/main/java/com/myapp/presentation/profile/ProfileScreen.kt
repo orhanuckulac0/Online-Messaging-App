@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.myapp.R
-import com.myapp.data.model.UserModel
 import com.myapp.presentation.util.StoreData
 import kotlinx.coroutines.launch
 
@@ -45,9 +45,11 @@ import kotlinx.coroutines.launch
 fun ProfileScreen(
     onSignOut: () -> Unit,
     viewModel: ProfileScreenViewModel = hiltViewModel(),
-    userDetails: UserModel?,
     onPopBackStack: () -> Unit,
     ) {
+
+    val user by viewModel.user.observeAsState(initial = null)
+
     var imageUri: Uri? by remember { mutableStateOf(null) }
     val context = LocalContext.current
     val dataStore = remember { StoreData(context) }
@@ -62,10 +64,10 @@ fun ProfileScreen(
                     )
                 scope.launch {
                     dataStore.storeImage(uri.toString())
-                    val user = userDetails!!.copy(
+                    val userToUpdate = user!!.copy(
                         profileImage = uri.toString()
                     )
-                    viewModel.updateUser(user)
+                    viewModel.updateUser(userToUpdate)
                 }
             }
         }
@@ -97,7 +99,7 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
             ) {
                 
-                Text(text = "Hello ${userDetails?.name}")
+                Text(text = "Hello ${user?.name}")
                 
                 if (imageUri != null){
                     AsyncImage(
@@ -126,7 +128,7 @@ fun ProfileScreen(
                 Button(
                     onClick = {
                         scope.launch {
-                            viewModel.updateUser(userDetails!!.copy(
+                            viewModel.updateUser(user!!.copy(
                                 loggedIn = false
                             ))
                             onSignOut()
